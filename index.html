@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regulators of Alternative Splicing</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #0d1117;
+            color: #f0f6fc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 24px;
+            box-sizing: border-box;
+        }
+        h1 {
+            color: #38bdf8;
+            margin: 0 0 4px 0;
+            font-size: 2.2rem;
+            text-align: center;
+        }
+        p.subtitle {
+            color: #8b949e;
+            margin: 0 0 24px 0;
+            font-size: 1rem;
+            text-align: center;
+        }
+        .main-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            background-color: #161b22;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+            border: 1px solid #30363d;
+            max-width: 1250px;
+            width: 100%;
+            gap: 36px;
+            box-sizing: border-box;
+        }
+        .wheel-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 540px;
+        }
+        svg {
+            width: 100%;
+            height: auto;
+            overflow: visible;
+        }
+        .segment {
+            transition: transform 0.2s ease, filter 0.2s ease;
+            cursor: pointer;
+            transform-origin: 400px 400px;
+        }
+        .segment:hover, .segment.active {
+            transform: scale(1.03);
+            filter: drop-shadow(0px 0px 14px rgba(255, 255, 255, 0.45));
+        }
+        .segment-title {
+            font-weight: 800;
+            font-size: 21px;
+            fill: #ffffff;
+            pointer-events: none;
+            text-shadow: 0px 2px 4px rgba(0,0,0,0.8);
+        }
+        .info-card {
+            flex: 1.25;
+            background-color: #0d1117;
+            border-radius: 14px;
+            border: 2px solid #f59e0b;
+            padding: 28px;
+            min-height: 560px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+        }
+        .card-header {
+            border-bottom: 1px solid #21262d;
+            padding-bottom: 10px;
+            margin-bottom: 16px;
+        }
+        .card-title {
+            font-size: 1.85rem;
+            font-weight: 800;
+            color: #f59e0b;
+            margin: 0 0 4px 0;
+        }
+        .card-subtitle {
+            font-size: 0.95rem;
+            color: #8b949e;
+            font-weight: 500;
+            margin: 0;
+        }
+        .card-body {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .diagram-container {
+            width: 100%;
+            height: 220px;
+            background-color: #161b22;
+            border-radius: 10px;
+            border: 1px solid #30363d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+            padding: 12px;
+            box-sizing: border-box;
+        }
+        .card-text {
+            color: #c9d1d9;
+            font-size: 0.98rem;
+            line-height: 1.6;
+            margin: 0 0 16px 0;
+        }
+        .card-text i, .ref-list i {
+            font-style: italic;
+        }
+        .card-references {
+            border-top: 1px solid #21262d;
+            padding-top: 12px;
+            margin-top: auto;
+        }
+        .ref-header {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #8b949e;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .ref-list {
+            margin: 0;
+            padding-left: 18px;
+            font-size: 0.88rem;
+            color: #58a6ff;
+        }
+        .ref-list li {
+            margin-bottom: 4px;
+        }
+        .ref-list a {
+            color: #58a6ff;
+            text-decoration: none;
+        }
+        .ref-list a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 950px) {
+            .main-container { flex-direction: column; }
+            .info-card { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Factors Regulating Alternative Splicing</h1>
+    <p class="subtitle">Interactive visual guide grounded in molecular determinants and literature</p>
+
+    <div class="main-container">
+        <!-- LEFT: SVG Wheel -->
+        <div class="wheel-container">
+            <svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <radialGradient id="centerGrad" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="#161b22"/>
+                        <stop offset="100%" stop-color="#0d1117"/>
+                    </radialGradient>
+                    <linearGradient id="ageGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#d97706"/></linearGradient>
+                    <linearGradient id="sexGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ec4899"/><stop offset="100%" stop-color="#be185d"/></linearGradient>
+                    <linearGradient id="chromatinGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1d4ed8"/></linearGradient>
+                    <linearGradient id="spliceosomeGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#6d28d9"/></linearGradient>
+                    <linearGradient id="rnaModGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#06b6d4"/><stop offset="100%" stop-color="#0e7490"/></linearGradient>
+                    <linearGradient id="tissueGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#047857"/></linearGradient>
+                    <linearGradient id="diseaseGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#b91c1c"/></linearGradient>
+                </defs>
+
+                <circle cx="400" cy="400" r="370" fill="none" stroke="#30363d" stroke-width="2" stroke-dasharray="6 6"/>
+
+                <g class="segment active" onclick="showPanel('age', event)">
+                    <path d="M 400 400 L 400 60 A 340 340 0 0 1 665.81 188.75 Z" fill="url(#ageGrad)" stroke="#0d1117" stroke-width="3"/>
+                    <text class="segment-title" x="480" y="200">Age</text>
+                </g>
+
+                <g class="segment" onclick="showPanel('sex', event)">
+                    <path d="M 400 400 L 665.81 188.75 A 340 340 0 0 1 731.49 475.61 Z" fill="url(#sexGrad)" stroke="#0d1117" stroke-width="3"/>
+                    <text class="segment-title" x="580" y="345">Sex</text>
+                </g>
+
+                <g class="segment" onclick="showPanel('chromatin', event)">
+                    <path d="M 400 400 L 731.49 475.61 A 340 340 0 0 1 547.45 706.34 Z" fill="url(#chromatinGrad)" stroke="#0d1117" stroke-width="3"/>
+                    <text class="segment-title" x="510" y="525">Chromatin</text>
+                    <text class="segment-title" x="500" y="550">Organization</text>
+                </g>
+
+                <g class="segment" onclick="showPanel('spliceosome', event)">
+                    <path d="M 400 400 L 547.45 706.34 A 340 340 0 0 1 252.55 706.34 Z" fill="url(#spliceosomeGrad)" stroke="#0d1117" stroke-width="3"/>
+                    <text class="segment-title" x="330" y="605">Spliceosome</text>
+                    <text class="segment-title" x="330" y="630">Components</text>
+                </g>
+
+                <g class="segment" onclick="showPanel('rnamod', event)">
+                    <path d="M 400 400 L 252.55 706.34 A 340 340 0 0 1 68.51 475.61 Z" fill="url(#rnaModGrad)" stroke="#0d1117" stroke-width="3"/>
+                    <text class="segment-title" x="140" y="525">RNA</text>
+                    <text class="segment-title" x="115" y="550">Modifications</text>
+                </g>
+
+                <g class="segment" onclick="showPanel('tissue', event)">
+                    <path d="M 400 400 L 68.51 475.61 A 340 340 0 0 1 134.19 188.75 Z" fill="url(#tissueGrad)" stroke="#0d1117" stroke-width="3"/>
+                    <text class="segment-title" x="165" y="345">Tissue</text>
+                </g>
+
+                <g class="segment" onclick="showPanel('disease', event)">
+                    <path d="M 400 400 L 134.19 188.75 A 340 340 0 0 1 400 60 Z" fill="url(#diseaseGrad)" stroke="#0d1117" stroke-width="3"/>
+                    <text class="segment-title" x="255" y="200">Disease</text>
+                </g>
+
+                <circle cx="400" cy="400" r="115" fill="url(#centerGrad)" stroke="#38bdf8" stroke-width="3"/>
+                <circle cx="400" cy="400" r="107" fill="none" stroke="#30363d" stroke-dasharray="4 4"/>
+                <text x="400" y="388" fill="#38bdf8" font-size="14" font-weight="bold" text-anchor="middle">ALTERNATIVE</text>
+                <text x="400" y="412" fill="#f0f6fc" font-size="18" font-weight="800" text-anchor="middle">SPLICING</text>
+                <text x="400" y="430" fill="#8b949e" font-size="11" font-weight="600" text-anchor="middle">REGULATION</text>
+            </svg>
+        </div>
+
+        <!-- RIGHT: Display Information Card -->
+        <div class="info-card" id="infoCard">
+            <div class="card-header">
+                <h2 class="card-title" id="panelTitle">Age</h2>
+                <p class="card-subtitle" id="panelSubtitle">age-associated decay and senescence</p>
+            </div>
+            <div class="card-body">
+                <div class="diagram-container" id="panelDiagram"></div>
+                <p class="card-text" id="panelText"></p>
+            </div>
+            <div class="card-references">
+                <div class="ref-header">References</div>
+                <ul class="ref-list" id="panelRefs"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const panelData = {
+            age: {
+                title: "Age",
+                subtitle: "age-associated decay and senescence",
+                color: "#f59e0b",
+                htmlText: "With age, changes in splicing patterns arise, many conserved and with enrichment in intrinsically disordered regions.",
+                refs: [
+                    { html: "Isaev and Knowles, bioRxiv, 2025 – <i>Aging-associated alternative splicing programs conserved between human and mouse tissues</i>", url: "https://doi.org/10.64898/2025.12.30.697080" },
+                    { html: "Jiang et al., Nat Comm, 2025 – <i>Splicing fidelity breakdown in senescence</i>", url: "https://doi.org/10.1038/s41467-025-65339-1" }
+                ],
+                diagram: `<svg viewBox="0 0 450 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g transform="translate(10, 20)">
+                        <text x="0" y="12" fill="#38bdf8" font-size="11" font-weight="bold">Young: Conserved Splicing</text>
+                        <line x1="0" y1="40" x2="260" y2="40" stroke="#48515c" stroke-width="3"/>
+                        <rect x="20" y="28" width="55" height="24" rx="4" fill="#38bdf8"/>
+                        <text x="31" y="44" fill="#0d1117" font-size="10" font-weight="bold">Exon 1</text>
+                        <rect x="185" y="28" width="55" height="24" rx="4" fill="#38bdf8"/>
+                        <text x="196" y="44" fill="#0d1117" font-size="10" font-weight="bold">Exon 2</text>
+                        <path d="M 47 28 Q 120 5 212 28" stroke="#38bdf8" stroke-width="2.5" fill="none"/>
+                    </g>
+                    <g transform="translate(10, 100)">
+                        <text x="0" y="12" fill="#f59e0b" font-size="11" font-weight="bold">Aged: Altered IDR Splicing</text>
+                        <line x1="0" y1="40" x2="260" y2="40" stroke="#f59e0b" stroke-width="3"/>
+                        <rect x="20" y="28" width="55" height="24" rx="4" fill="#38bdf8"/>
+                        <text x="31" y="44" fill="#0d1117" font-size="10" font-weight="bold">Exon 1</text>
+                        <rect x="95" y="28" width="70" height="24" rx="4" fill="#f59e0b"/>
+                        <text x="104" y="44" fill="#0d1117" font-size="10" font-weight="bold">IDR Exon</text>
+                        <rect x="185" y="28" width="55" height="24" rx="4" fill="#38bdf8"/>
+                        <text x="196" y="44" fill="#0d1117" font-size="10" font-weight="bold">Exon 2</text>
+                        <path d="M 47 28 Q 72 10 130 28" stroke="#f59e0b" stroke-width="2" fill="none"/>
+                        <path d="M 130 28 Q 155 10 212 28" stroke="#f59e0b" stroke-width="2" fill="none"/>
+                    </g>
+                    <g transform="translate(290, 45)">
+                        <rect x="0" y="0" width="145" height="90" rx="8" fill="#161b22" stroke="#30363d"/>
+                        <path d="M 15 45 Q 35 15 55 45 T 95 45 T 135 45" stroke="#f59e0b" stroke-width="3" fill="none"/>
+                        <text x="12" y="76" fill="#8b949e" font-size="9" font-weight="bold">Intrinsically Disordered</text>
+                        <text x="42" y="86" fill="#8b949e" font-size="9" font-weight="bold">Region (IDR)</text>
+                    </g>
+                </svg>`
+            },
+            sex: {
+                title: "Sex",
+                subtitle: "sexual dimorphism and sex-specific AS",
+                color: "#ec4899",
+                htmlText: "Genes are spliced depending on the sex of the organism. A great example of this is <i>Sxl</i>, which is the master sex determination factor in <i>Drosophila</i>.",
+                refs: [
+                    { html: "Bell et al., Cell, 1991 – <i>Positive autoregulation of Sex-lethal alternative splicing in Drosophila</i>", url: "https://www.sciencedirect.com/science/article/pii/009286749190157T" },
+                    { html: "Lallena et al., Cell, 2002 – <i>Sxl control of alternative splicing networks in Drosophila</i>", url: "https://www.cell.com/fulltext/S0092-8674(02)00730-4" }
+                ],
+                diagram: `<svg viewBox="0 0 450 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g transform="translate(10, 15)">
+                        <text x="0" y="12" fill="#ec4899" font-size="11" font-weight="bold">♀ Female <tspan font-style="italic">Sxl</tspan> (Exon 3 Skipped → Functional <tspan font-style="italic">Sxl</tspan>)</text>
+                        <line x1="0" y1="45" x2="420" y2="45" stroke="#48515c" stroke-width="3"/>
+                        <rect x="20" y="33" width="55" height="24" rx="4" fill="#ec4899"/>
+                        <text x="31" y="49" fill="#fff" font-size="10" font-weight="bold">Exon 2</text>
+
+                        <rect x="135" y="33" width="130" height="24" rx="4" fill="#161b22" stroke="#ec4899" stroke-dasharray="3 3"/>
+                        <text x="142" y="49" fill="#8b949e" font-size="9.5">Exon 3 (STOP Codon)</text>
+
+                        <rect x="320" y="33" width="55" height="24" rx="4" fill="#ec4899"/>
+                        <text x="331" y="49" fill="#fff" font-size="10" font-weight="bold">Exon 4</text>
+
+                        <circle cx="115" cy="45" r="11" fill="#ec4899"/>
+                        <text x="106" y="48" fill="#fff" font-size="8.5" font-style="italic" font-weight="bold">Sxl</text>
+
+                        <path d="M 47 33 Q 197 -5 347 33" stroke="#ec4899" stroke-width="2.5" fill="none"/>
+                    </g>
+                    <g transform="translate(10, 95)">
+                        <text x="0" y="12" fill="#3b82f6" font-size="11" font-weight="bold">♂ Male <tspan font-style="italic">Sxl</tspan> (Exon 3 Included → Truncated <tspan font-style="italic">Sxl</tspan>)</text>
+                        <line x1="0" y1="45" x2="420" y2="45" stroke="#48515c" stroke-width="3"/>
+                        <rect x="20" y="33" width="55" height="24" rx="4" fill="#3b82f6"/>
+                        <text x="31" y="49" fill="#fff" font-size="10" font-weight="bold">Exon 2</text>
+
+                        <rect x="135" y="33" width="130" height="24" rx="4" fill="#ef4444"/>
+                        <text x="142" y="49" fill="#fff" font-size="9.5" font-weight="bold">Exon 3 (STOP Codon)</text>
+
+                        <rect x="320" y="33" width="55" height="24" rx="4" fill="#3b82f6"/>
+                        <text x="331" y="49" fill="#fff" font-size="10" font-weight="bold">Exon 4</text>
+
+                        <path d="M 47 33 Q 120 15 200 33" stroke="#3b82f6" stroke-width="2" fill="none"/>
+                        <path d="M 200 33 Q 270 15 347 33" stroke="#3b82f6" stroke-width="2" fill="none"/>
+                    </g>
+                </svg>`
+            },
+            chromatin: {
+                title: "Chromatin Organization/Remodelling",
+                subtitle: "histone marks, nuclear speckles, Pol II elongation, and DNA-binding proteins",
+                color: "#3b82f6",
+                htmlText: "The nucleus is incredibly packed and dense, and transcriptional regulation relies on the compactness of chromatin. Nuclear speckles act as key regulatory hubs that dynamically compartmentalize splicing factors and coordinate alternative splicing within adjacent loose chromatin domains.",
+                refs: [
+                    { html: "Luco et al., Science, 2010 – <i>Epigenetic regulation of alternative splicing by histone modifications</i>", url: "https://www.science.org/doi/10.1126/science.1184208" },
+                    { html: "Spector & Lamond, Cold Spring Harb Perspect Biol, 2011 – <i>Nuclear speckles as regulatory hubs</i>", url: "https://cshperspectives.cshlp.org/content/3/2/a000646" }
+                ],
+                diagram: `<svg viewBox="0 0 450 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g transform="translate(20, 20)">
+                        <ellipse cx="90" cy="70" rx="75" ry="55" fill="#3b82f6" fill-opacity="0.25" stroke="#3b82f6" stroke-width="2" stroke-dasharray="5 5"/>
+                        <text x="32" y="65" fill="#60a5fa" font-size="11" font-weight="bold">Nuclear Speckle Hub</text>
+                        <text x="45" y="80" fill="#8b949e" font-size="9">(Splicing Factor Reservoir)</text>
+                        <circle cx="50" cy="35" r="7" fill="#8b5cf6"/>
+                        <circle cx="130" cy="95" r="8" fill="#06b6d4"/>
+                        <circle cx="140" cy="45" r="6" fill="#10b981"/>
+                    </g>
+                    <g transform="translate(195, 20)">
+                        <text x="10" y="15" fill="#38bdf8" font-size="11" font-weight="bold">Loose Chromatin Domain &amp; Speckle Hub</text>
+                        <path d="M 10 90 Q 60 20 140 90" stroke="#60a5fa" stroke-width="3" fill="none"/>
+                        <circle cx="75" cy="55" r="10" fill="#10b981"/>
+                        <text x="60" y="35" fill="#10b981" font-size="9" font-weight="bold">Active AS Site</text>
+                        <path d="M 140 90 Q 170 120 200 90" stroke="#48515c" stroke-width="5" fill="none"/>
+                        <text x="135" y="125" fill="#8b949e" font-size="9">Dense Chromatin</text>
+                    </g>
+                </svg>`
+            },
+            spliceosome: {
+                title: "Spliceosome Components",
+                subtitle: "snRNPs, snRNA, RBPs and binding partners",
+                color: "#8b5cf6",
+                htmlText: "There are two types of spliceosome complexes, and even within these complexes are different binding partners composed of specialized snRNA frameworks and distinct protein assemblies.",
+                refs: [
+                    { html: "Wahl, Will, & Lührmann, Cell, 2009 – <i>The Spliceosome Design and Mechanism</i>", url: "https://doi.org/10.1016/j.cell.2009.02.009" },
+                    { html: "Burge et al., Mol Cell Biol, 1999 – <i>Splicing of Pre-mRNAs by Major and Minor Spliceosomes</i>", url: "https://doi.org/10.1128/MCB.19.5.3225" }
+                ],
+                diagram: `<svg viewBox="0 0 450 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Curved arrow connecting both complexes -->
+                    <path d="M 125 32 Q 225 -10 325 32" stroke="#8b5cf6" stroke-width="2.5" fill="none" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+                    <defs>
+                        <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M 0 0 L 10 5 L 0 10 z" fill="#8b5cf6"/>
+                        </marker>
+                    </defs>
+
+                    <!-- Pre-mRNA Backbone -->
+                    <rect x="10" y="85" width="430" height="20" fill="none" stroke="#f0f6fc" stroke-width="2"/>
+                    <!-- Exon-Intron junction boxes -->
+                    <rect x="15" y="70" width="35" height="50" fill="none" stroke="#f0f6fc" stroke-width="2"/>
+                    <rect x="175" y="70" width="30" height="50" fill="none" stroke="#f0f6fc" stroke-width="2"/>
+                    <rect x="245" y="70" width="30" height="50" fill="none" stroke="#f0f6fc" stroke-width="2"/>
+                    <rect x="400" y="70" width="35" height="50" fill="none" stroke="#f0f6fc" stroke-width="2"/>
+                    <line x1="50" y1="95" x2="175" y2="95" stroke="#f0f6fc" stroke-width="3"/>
+                    <line x1="275" y1="95" x2="400" y2="95" stroke="#f0f6fc" stroke-width="3"/>
+
+                    <!-- Left Oval: AT-AC (Minor) Spliceosome -->
+                    <ellipse cx="120" cy="95" rx="75" ry="48" fill="#dc2626" fill-opacity="0.85" stroke="#b91c1c" stroke-width="2"/>
+                    <circle cx="95" cy="80" r="18" fill="#fef08a" stroke="#ca8a04" stroke-width="1.5"/>
+                    <text x="95" y="85" fill="#0d1117" font-size="11" font-weight="bold" text-anchor="middle">U11</text>
+                    <circle cx="145" cy="80" r="18" fill="#f472b6" stroke="#db2777" stroke-width="1.5"/>
+                    <text x="145" y="85" fill="#0d1117" font-size="11" font-weight="bold" text-anchor="middle">U12</text>
+
+                    <!-- Right Oval: GT-AG (Major) Spliceosome -->
+                    <ellipse cx="330" cy="95" rx="75" ry="48" fill="#38bdf8" fill-opacity="0.85" stroke="#0284c7" stroke-width="2"/>
+                    <circle cx="305" cy="80" r="18" fill="#fbbf24" stroke="#d97706" stroke-width="1.5"/>
+                    <text x="305" y="85" fill="#0d1117" font-size="11" font-weight="bold" text-anchor="middle">U1</text>
+                    <circle cx="355" cy="80" r="18" fill="#c084fc" stroke="#9333ea" stroke-width="1.5"/>
+                    <text x="355" y="85" fill="#0d1117" font-size="11" font-weight="bold" text-anchor="middle">U2</text>
+
+                    <!-- Bottom Labels -->
+                    <text x="120" y="165" fill="#ef4444" font-size="12" font-weight="800" text-anchor="middle">AT-AC SPLICEOSOME</text>
+                    <text x="330" y="165" fill="#38bdf8" font-size="12" font-weight="800" text-anchor="middle">GT-AG SPLICEOSOME</text>
+                </svg>`
+            },
+            rnamod: {
+                title: "RNA Modifications",
+                subtitle: "m6A, m5C, pseudouridine, m7G",
+                color: "#06b6d4",
+                htmlText: "A good example here again is <i>Sxl</i> which relies on m6A methylation for normal splicing.",
+                refs: [
+                    { html: "Haussmann et al., Nature, 2016 – <i>m6A potentiates Sex-lethal alternative pre-mRNA splicing in Drosophila</i>", url: "https://www.nature.com/articles/nature20577" },
+                    { html: "Lence et al., Nature, 2016 – <i>m6A modulates Sex-lethal alternative splicing in Drosophila</i>", url: "https://www.nature.com/articles/nature20568" }
+                ],
+                diagram: `<svg viewBox="0 0 450 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g transform="translate(10, 15)">
+                        <text x="0" y="12" fill="#38bdf8" font-size="11" font-weight="bold">m6A Methylation Drives <tspan font-style="italic">Sxl</tspan> Pre-mRNA Splicing</text>
+                        <line x1="0" y1="50" x2="420" y2="50" stroke="#48515c" stroke-width="3"/>
+
+                        <rect x="20" y="38" width="55" height="24" rx="4" fill="#ec4899"/>
+                        <text x="31" y="54" fill="#fff" font-size="10" font-weight="bold">Exon 2</text>
+
+                        <rect x="145" y="38" width="130" height="24" rx="4" fill="#161b22" stroke="#ec4899" stroke-dasharray="3 3"/>
+                        <text x="152" y="54" fill="#8b949e" font-size="9.5">Exon 3 (STOP Codon)</text>
+
+                        <rect x="330" y="38" width="55" height="24" rx="4" fill="#ec4899"/>
+                        <text x="341" y="54" fill="#fff" font-size="10" font-weight="bold">Exon 4</text>
+
+                        <circle cx="110" cy="50" r="12" fill="#06b6d4"/>
+                        <text x="100" y="54" fill="#fff" font-size="9" font-weight="bold">m6A</text>
+
+                        <path d="M 47 38 Q 195 5 357 38" stroke="#06b6d4" stroke-width="2.5" fill="none"/>
+                    </g>
+                    <g transform="translate(10, 115)">
+                        <text x="0" y="12" fill="#8b949e" font-size="10" font-weight="bold">Epitranscriptomic Marks:</text>
+                        <rect x="120" y="0" width="55" height="20" rx="4" fill="#06b6d4"/><text x="133" y="14" fill="#fff" font-size="10" font-weight="bold">m6A</text>
+                        <rect x="185" y="0" width="55" height="20" rx="4" fill="#3b82f6"/><text x="198" y="14" fill="#fff" font-size="10" font-weight="bold">m5C</text>
+                        <rect x="250" y="0" width="55" height="20" rx="4" fill="#8b5cf6"/><text x="272" y="14" fill="#fff" font-size="10" font-weight="bold">Ψ</text>
+                        <rect x="315" y="0" width="55" height="20" rx="4" fill="#10b981"/><text x="328" y="14" fill="#fff" font-size="10" font-weight="bold">m7G</text>
+                    </g>
+                </svg>`
+            },
+            tissue: {
+                title: "Tissue",
+                subtitle: "cell identity, location, and tissue-specific expression",
+                color: "#10b981",
+                htmlText: "The brain has the highest percentage of alternative splicing which is conserved, but other tissues exhibit varying degrees of alternative splicing of various genes depending on cell-type.",
+                refs: [
+                    { html: "Yeo et al., Genome Biol, 2004 – <i>Variation in alternative splicing across human tissues</i>", url: "https://genomebiology.biomedcentral.com/articles/10.1186/gb-2004-5-10-r74" },
+                    { html: "Baralle & Giudice, Nat Rev Mol Cell Biol, 2017 – <i>Alternative splicing as a regulator of development and tissue identity</i>", url: "https://www.nature.com/articles/nrm.2017.27" }
+                ],
+                diagram: `<svg viewBox="0 0 450 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g transform="translate(15, 25)">
+                        <text x="0" y="15" fill="#34d399" font-size="11" font-weight="bold">Brain / CNS (Highest AS Complexity &amp; Conservation)</text>
+                        <rect x="0" y="25" width="410" height="26" rx="4" fill="#161b22" stroke="#10b981"/>
+                        <rect x="0" y="25" width="410" height="26" rx="4" fill="#10b981"/>
+                        <text x="205" y="42" fill="#0d1117" font-size="11" font-weight="bold" text-anchor="middle">High AS Complexity</text>
+                    </g>
+                    <g transform="translate(15, 95)">
+                        <text x="0" y="15" fill="#8b949e" font-size="11" font-weight="bold">Other Tissues (Cell-Type Dependent AS Networks)</text>
+                        <rect x="0" y="25" width="410" height="26" rx="4" fill="#161b22" stroke="#30363d"/>
+                        <rect x="0" y="25" width="220" height="26" rx="4" fill="#3b82f6"/>
+                        <text x="110" y="42" fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle">Variable Complexity</text>
+                    </g>
+                </svg>`
+            },
+            disease: {
+                title: "Disease",
+                subtitle: "mutations, pathogenesis, and aberrant splicing",
+                color: "#ef4444",
+                htmlText: "Mutations at the DNA level can lead to downstream splicing effects, but aberrant splicing itself can in turn lead to further aberrant splicing, resulting in disease.",
+                refs: [
+                    { html: "Scotti & Swanson, Nat Rev Genet, 2016 – <i>RNA mis-splicing in human disease</i>", url: "https://doi.org/10.1038/nrg.2015.3" },
+                    { html: "Darman et al., Cell Rep, 2015 – <i>Spliceosomal mutations induce broad aberrant splicing cascades</i>", url: "https://doi.org/10.1016/j.celrep.2015.09.053" }
+                ],
+                diagram: `<svg viewBox="0 0 450 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g transform="translate(10, 45)">
+                        <rect x="0" y="10" width="100" height="50" rx="6" fill="#161b22" stroke="#ef4444" stroke-width="1.5"/>
+                        <text x="10" y="32" fill="#ef4444" font-size="10" font-weight="bold">DNA Mutation</text>
+                        <text x="10" y="47" fill="#8b949e" font-size="8">(Splice Site / Cis)</text>
+
+                        <path d="M 105 35 L 135 35" stroke="#ef4444" stroke-width="2" stroke-dasharray="3 3"/>
+
+                        <rect x="140" y="10" width="125" height="50" rx="6" fill="#161b22" stroke="#ef4444" stroke-width="1.5"/>
+                        <text x="148" y="32" fill="#ef4444" font-size="10" font-weight="bold">Aberrant Splicing</text>
+                        <text x="148" y="47" fill="#8b949e" font-size="8">(Primary Transcript)</text>
+
+                        <path d="M 270 35 L 300 35" stroke="#ef4444" stroke-width="2"/>
+
+                        <rect x="305" y="0" width="125" height="70" rx="6" fill="#ef4444"/>
+                        <text x="313" y="25" fill="#fff" font-size="10" font-weight="bold">Further Aberrant</text>
+                        <text x="313" y="40" fill="#fff" font-size="10" font-weight="bold">Splicing Cascade</text>
+                        <text x="313" y="58" fill="#fca5a5" font-size="8">Disease State</text>
+                    </g>
+                </svg>`
+            }
+        };
+
+        function showPanel(key, evt) {
+            const data = panelData[key];
+            if (!data) return;
+
+            document.getElementById('panelTitle').innerText = data.title;
+            document.getElementById('panelSubtitle').innerText = data.subtitle;
+            document.getElementById('infoCard').style.borderColor = data.color;
+            document.getElementById('panelTitle').style.color = data.color;
+
+            document.getElementById('panelDiagram').innerHTML = data.diagram;
+            
+            const textElem = document.getElementById('panelText');
+            textElem.innerHTML = data.htmlText;
+
+            const refList = document.getElementById('panelRefs');
+            refList.innerHTML = '';
+            data.refs.forEach(ref => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = ref.url;
+                a.target = '_blank';
+                a.innerHTML = ref.html;
+                li.appendChild(a);
+                refList.appendChild(li);
+            });
+
+            const segments = document.querySelectorAll('.segment');
+            segments.forEach(seg => seg.classList.remove('active'));
+            if (evt && evt.currentTarget) {
+                evt.currentTarget.classList.add('active');
+            }
+        }
+
+        window.onload = function() {
+            showPanel('age', null);
+        };
+    </script>
+</body>
+</html>
